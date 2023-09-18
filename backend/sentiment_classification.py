@@ -17,6 +17,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Activation,Dropout, Flatten, Embedding
 import pickle
 from xgboost import XGBClassifier
+from sklearn.preprocessing import LabelEncoder
 
 #Path to the folder consisting different Emotions folders
 path_data = sys.argv[1]
@@ -70,9 +71,9 @@ for d in directories:
         #print(feature.shape)
 '''
 
-f2 = open('feature.pkl','rb')
+f2 = open('./model/feature.pkl','rb')
 feature_all = pickle.load(f2)
-f3 = open('label.pkl','rb')
+f3 = open('./model/label.pkl','rb')
 labels = pickle.load(f3)
 from copy import deepcopy
 y = deepcopy(labels)
@@ -88,30 +89,30 @@ for i in range(len(f)):
     one_hot_encode[f[i],y[i]-1]=1
 
 
-X_train,X_test,y_train,y_test = train_test_split(feature_all,one_hot_encode,test_size = 0.3,random_state=20)
+X_train,X_test,y_train,y_test = train_test_split(feature_all,one_hot_encode,test_size = 0.2,random_state=20)
 
 ########################### MODEL 1 ###########################
 model = Sequential()
 
-model.add(Dense(X_train.shape[1],input_dim =X_train.shape[1],init='normal',activation ='relu'))
+model.add(Dense(X_train.shape[1],input_dim =X_train.shape[1],activation ='relu'))
 
-model.add(Dense(400,init='normal',activation ='relu'))
-
-model.add(Dropout(0.2))
-
-model.add(Dense(200,init='normal',activation ='relu'))
+model.add(Dense(400,activation ='relu'))
 
 model.add(Dropout(0.2))
 
-model.add(Dense(100,init='normal',activation ='relu'))
+model.add(Dense(200, activation ='relu'))
 
 model.add(Dropout(0.2))
 
-model.add(Dense(y_train.shape[1],init='normal',activation ='softmax'))
+model.add(Dense(100, activation ='relu'))
+
+model.add(Dropout(0.2))
+
+model.add(Dense(y_train.shape[1], activation ='softmax'))
 
 model.compile(loss = 'categorical_crossentropy',optimizer='adadelta',metrics=['accuracy'])
 
-model.fit(X_train,y_train,nb_epoch=200,batch_size = 5,verbose=1)
+model.fit(X_train,y_train,epochs=200,batch_size = 5,verbose=1)
 
 
 model.evaluate(X_test,y_test)
@@ -135,25 +136,25 @@ print('Accuracy for model 1 : ' + str((count / y2.shape[0]) * 100))
 ########################### MODEL 2 ###########################
 model2 = Sequential()
 
-model2.add(Dense(X_train.shape[1],input_dim =X_train.shape[1],init='normal',activation ='relu'))
+model2.add(Dense(X_train.shape[1],input_dim =X_train.shape[1],activation ='relu'))
 
-model2.add(Dense(400,init='normal',activation ='tanh'))
-
-model2.add(Dropout(0.2))
-
-model2.add(Dense(200,init='normal',activation ='tanh'))
+model2.add(Dense(400, activation ='tanh'))
 
 model2.add(Dropout(0.2))
 
-model2.add(Dense(100,init='normal',activation ='sigmoid'))
+model2.add(Dense(200, activation ='tanh'))
 
 model2.add(Dropout(0.2))
 
-model2.add(Dense(y_train.shape[1],init='normal',activation ='softmax'))
+model2.add(Dense(100, activation ='sigmoid'))
+
+model2.add(Dropout(0.2))
+
+model2.add(Dense(y_train.shape[1],activation ='softmax'))
 
 model2.compile(loss = 'categorical_crossentropy',optimizer='adadelta',metrics=['accuracy'])
 
-model2.fit(X_train,y_train,nb_epoch=200,batch_size = 5,verbose=1)
+model2.fit(X_train,y_train,epochs=200,batch_size = 5,verbose=1)
 
 model2.evaluate(X_test, y_test)
 
@@ -176,21 +177,25 @@ for i in range(y22.shape[0]):
 print('Accuracy for model 2 : ' + str((count / y22.shape[0]) * 100))
 
 
-X_train2,X_test2,y_train2,y_test2 = train_test_split(feature_all,y,test_size = 0.3,random_state=20)
+X_train2,X_test2,y_train2,y_test2 = train_test_split(feature_all,y,test_size = 0.2,random_state=20)
+
+# le=LabelEncoder()
+# y_train2=le.fit_transform(y_train2)
+
 
 ########################### MODEL 3 ###########################
-model3 = XGBClassifier()
-model3.fit(X_train2,y_train2)
-model3.evals_result()
-score = cross_val_score(model3, X_train2, y_train2, cv=5)
-y_pred3 = model3.predict(X_test)
+# model3 = XGBClassifier()
+# model3.fit(X_train2,y_train2)
+# model3.evals_result()
+# score = cross_val_score(model3, X_train2, y_train2, cv=5)
+# y_pred3 = model3.predict(X_test)
 
-count = 0
-for i in range(y_pred3.shape[0]):
-    if y_pred3[i] == y_test2[i]:
-        count+=1   
+# count = 0
+# for i in range(y_pred3.shape[0]):
+#     if y_pred3[i] == y_test2[i]:
+#         count+=1   
         
-print('Accuracy for model 3 : ' + str((count / y_pred3.shape[0]) * 100))
+#print('Accuracy for model 3 : ' + str((count / y_pred3.shape[0]) * 100))
 
 
 ########################### TESTING ###########################
@@ -203,7 +208,7 @@ mfccs = np.mean(librosa.feature.mfcc(y=X, sr=sr, n_mfcc=40),axis=1)
 
 chroma = np.mean(librosa.feature.chroma_stft(S=stft, sr=sr).T,axis=0)
 
-mel = np.mean(librosa.feature.melspectrogram(X, sr=sr).T,axis=0)
+mel = np.mean(librosa.feature.melspectrogram(X,sr=sr).T,axis=0)
 
 contrast = np.mean(librosa.feature.spectral_contrast(S=stft, sr=sr,fmin=0.5*sr* 2**(-6)).T,axis=0)
 
