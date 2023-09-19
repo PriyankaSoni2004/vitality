@@ -63,12 +63,12 @@ def getJson(sent):
         case "angry":
             return {
            "score_neutral": 0.1,
-            "score_calm": 0.1,
+            "score_calm": 0.09,
             "score_happy": 0.0,
-            "score_sad": 0.2,
+            "score_sad": 0.12,
             "score_angry": 0.7,
             "score_fearful": 0.2,
-            "score_disgust": 0.5,
+            "score_disgust": 0.0,
             "score_surprised": 0.1,
             "prominent_sentiment": "angry"
         }
