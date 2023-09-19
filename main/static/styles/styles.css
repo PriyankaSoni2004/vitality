@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: #D2F2F0;
+    background-color: #E5CFF7;
 }
 
 main {
@@ -20,11 +20,11 @@ h1 {
     line-height: 0.75;
     letter-spacing: -3px;
     font-size: 3em;
-    color: #343A40;
+    color: #000;
 }
 
 .sentiment-text {
-    color: #D2686E;
+    color: #5B0888;
     font-weight: bold;
 }
 
@@ -60,8 +60,8 @@ h1 {
 
 .submit-button > input {
     margin: 5px 0;
-    background-color: #D2686E;
-    border: #D2686E;
+    background-color: #5B0888;
+    border: #5B0888;
 }
 
 #sentiment-overlay {

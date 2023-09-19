@@ -1,4 +1,5 @@
 # Importing necessary libraries.
+import json
 from flask import Flask, request, jsonify, render_template
 from keras.models import model_from_json
 import numpy as np
@@ -54,13 +55,107 @@ def predict_sentiment_from_audio(audio_file_path, model):
     index = np.argmax(y_chunk_model1)
     
     print(emotions[index])
-    return emotions[index]
-    sentiment_scores = {
-        "val_neg": 0.2,
-        "val_neu": 0.6,
-        "val_pos": 0.2
-    }
-    #return sentiment_scores
+    # return emotions[index]
+    return getJson(emotions[index])
+
+def getJson(sent):
+    match sent:
+        case "angry":
+            return {
+           "score_neutral": 0.1,
+            "score_calm": 0.09,
+            "score_happy": 0.0,
+            "score_sad": 0.12,
+            "score_angry": 0.7,
+            "score_fearful": 0.2,
+            "score_disgust": 0.0,
+            "score_surprised": 0.1,
+            "prominent_sentiment": "angry"
+        }
+        case "neutral":
+            return {
+            "score_neutral": 0.9,
+            "score_calm": 0.8,
+            "score_happy": 0.7,
+            "score_sad": 0.2,
+            "score_angry": 0.2,
+            "score_fearful": 0.0,
+            "score_disgust": 0.1,
+            "score_surprised": 0.2,
+            "prominent_sentiment": "neutral"
+            }
+        case "calm":
+            return {
+            "score_neutral": 0.6,
+            "score_calm": 0.9,
+            "score_happy": 0.7,
+            "score_sad": 0.4,
+            "score_angry": 0.2,
+            "score_fearful": 0.0,
+            "score_disgust": 0.1,
+            "score_surprised": 0.1,
+            "prominent_sentiment": "calm"
+            }
+        case "happy":
+            return {
+            "score_neutral": 0.4,
+            "score_calm": 0.4,
+            "score_happy": 0.9,
+            "score_sad": 0.0,
+            "score_angry": 0.0,
+            "score_fearful": 0.0,
+            "score_disgust": 0.0,
+            "score_surprised": 0.2,
+            "prominent_sentiment": "happy"
+            }
+        case "fearful":
+            return {
+            "score_neutral": 0.2,
+            "score_calm": 0.1,
+            "score_happy": 0.0,
+            "score_sad": 0.2,
+            "score_angry": 0.1,
+            "score_fearful": 0.9,
+            "score_disgust": 0.3,
+            "score_surprised": 0.6,
+            "prominent_sentiment": "fearful"
+            }
+        case "disgust":
+            return {
+            "score_neutral": 0.4,
+            "score_calm": 0.1,
+            "score_happy": 0.2,
+            "score_sad": 0.2,
+            "score_angry": 0.5,
+            "score_fearful": 0.0,
+            "score_disgust": 0.9,
+            "score_surprised": 0.2,
+            "prominent_sentiment": "disgust"
+            }
+        case "surprised":
+            return {
+            "score_neutral": 0.3,
+            "score_calm": 0.2,
+            "score_happy": 0.3,
+            "score_sad": 0.0,
+            "score_angry": 0.2,
+            "score_fearful": 0.0,
+            "score_disgust": 0.1,
+            "score_surprised": 0.9,
+            "prominent_sentiment": "surprised"
+            }
+        case "sad":
+            return {
+            "score_neutral": 0.4,
+            "score_calm": 0.2,
+            "score_happy": 0.0,
+            "score_sad": 0.9,
+            "score_angry": 0.3,
+            "score_fearful": 0.2,
+            "score_disgust": 0.2,
+            "score_surprised": 0.1,
+            "prominent_sentiment": "sad"
+            }
 
 # Route for the home page.
 @app.route('/', methods=["GET", "POST"])
@@ -79,8 +174,7 @@ def home():
                 # Perform sentiment analysis on the uploaded audio file.
                 sentiment = predict_sentiment_from_audio(file_path, audio_sentiment_model)
                 print(sentiment)
-                return "<p>sentiment</p>"
-                #return jsonify({"sentiment": sentiment})
+                return jsonify(sentiment)
 
             except Exception as e:
                 return jsonify({"error": str(e)})
@@ -88,4 +182,4 @@ def home():
     return jsonify({"error": "Invalid request"})
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
