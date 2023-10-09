@@ -1,54 +1,331 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sentiment Analysis Using Flask</title>
+  <head>
+    <title>Soft UI Pro</title>
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{url_for('static', filename='images/favicon/sentiment.png')}}">
-    <!-- Bootstrap CDN CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <!-- Static CSS -->
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles/styles.css')}}">
-</head>
+    <link rel="icon" type="image/png" href="static/public/sentiment.png">
+    <meta property="og:title" content="Soft UI Pro" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta property="twitter:card" content="summary_large_image" />
 
-<body>
-    <!-- The main form section -->
-    <main class="analysis-input-box">
-        <h1>FIND THE <span class="sentiment-text">SENTIMENT</span><br />FROM YOUR INPUT.</h1>
-        <form method="POST" action="/">
-            <!-- Choose Prompt Option -->
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                <div class="prompt-buttons">
-                    <button type="button" id="btn-prompt-media" class="btn btn-dark">Media</button>
+    <style data-tag="reset-style-sheet">
+      html {  line-height: 1.15;}body {  margin: 0;}* {  box-sizing: border-box;  border-width: 0;  border-style: solid;}p,li,ul,pre,div,h1,h2,h3,h4,h5,h6,figure,blockquote,figcaption {  margin: 0;  padding: 0;}button {  background-color: transparent;}button,input,optgroup,select,textarea {  font-family: inherit;  font-size: 100%;  line-height: 1.15;  margin: 0;}button,select {  text-transform: none;}button,[type="button"],[type="reset"],[type="submit"] {  -webkit-appearance: button;}button::-moz-focus-inner,[type="button"]::-moz-focus-inner,[type="reset"]::-moz-focus-inner,[type="submit"]::-moz-focus-inner {  border-style: none;  padding: 0;}button:-moz-focus,[type="button"]:-moz-focus,[type="reset"]:-moz-focus,[type="submit"]:-moz-focus {  outline: 1px dotted ButtonText;}a {  color: inherit;  text-decoration: inherit;}input {  padding: 2px 4px;}img {  display: block;}html { scroll-behavior: smooth  }
+    </style>
+    <style data-tag="default-style-sheet">
+      html {
+        font-family: Open Sans;
+        font-size: 1rem;
+      }
+
+      body {
+        font-weight: 400;
+        font-style:normal;
+        text-decoration: none;
+        text-transform: none;
+        letter-spacing: normal;
+        line-height: 1.625;
+        color: var(--dl-color-secondary-400);
+        background-color: var(--dl-color-gray-white);
+
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&amp;display=swap"
+      data-tag="font"
+    />
+    <style>
+      html * {
+          -webkit-font-smoothing: antialiased;
+      }
+      input::placeholder, textarea::placeholder {
+         color: #d2d6da;
+      }
+    </style>
+  </head>
+  <body>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles/style.css')}}">
+    <div>
+      <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles/index.css')}}">
+      <div class="home-container">
+        <div data-role="Header" class="header-header">
+          <nav class="header-nav">
+            <div class="header-container">
+              <a href="index.html" class="header-navlink Large">
+                <span>Sentiment Analyser</span>
+              </a>
+              <div class="header-menu">
+                <a href="#target1" class="header-navlink1 Large">About Us</a>
+                <a href="#target2" class="header-navlink2 Large">Analyser</a>
+              </div>
+              <div class="header-container1">
+                <div class="header-container2">
+                  <div class="primary-pink-button-container">
+                    <button class="primary-pink-button-button button ButtonSmall">
+                      <a href="/login" ><span>Log In</span></a>
+                    </button>
+                  </div>
                 </div>
+                <div data-role="BurgerMenu" class="header-burger-menu">
+                  <svg viewBox="0 0 1024 1024" class="header-icon">
+                    <path
+                      d="M128 256h768v86h-768v-86zM128 554v-84h768v84h-768zM128 768v-86h768v86h-768z"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
             </div>
-            <div class="form-group">
-                <!-- Enter Media Input -->
-                <div id="div-media">
-                    <label for="form-input-media" class="form-label">Choose Media:</label>
-                    <input type="file" id="form-input-media" class="form-control" name="audio-file" />
-                </div>
-                <!-- Submit Button -->
-                <div class="submit-button">
-                    <input type="submit" id="btn-find-sentiment" class="btn btn-success" value="Find Sentiment" />
-                </div>
+          </nav>
+          <div data-role="MobileMenu" class="header-mobile-menu">
+            <div class="header-top">
+              <a href="index.html" class="header-navlink3 Large">
+                Soft UI Design System
+              </a>
+              <div data-role="CloseMobileMenu" class="header-close-menu">
+                <svg viewBox="0 0 1024 1024" class="header-icon2">
+                  <path
+                    d="M810 274l-238 238 238 238-60 60-238-238-238 238-60-60 238-238-238-238 60-60 238 238 238-238z"
+                  ></path>
+                </svg>
+              </div>
             </div>
+            <div class="header-mid">
+              <div class="header-menu1">
+                <a href="index.html" class="header-navlink4 Large">Home</a>
+                <a href="profile.html" class="header-navlink5 Large">Profile</a>
+                <a href="coming-soon.html" class="header-navlink6 Large">
+                  Coming Soon
+                </a>
+              </div>
+            </div>
+            <div class="header-bot">
+              <div class="primary-pink-button-container">
+                <button class="primary-pink-button-button button ButtonSmall">
+                  <span>buy now</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="home-hero">
+          <div class="home-container01">
+            <div class="home-card">
+              <h1 class="home-text">SENTIMENT ANALYSER</h1>
+              <h1 class="home-text01 HeadingOne">Choose the best</h1>
+              <span class="home-text02">
+                This Sentiment Analyzer offers quick insights into customer
+                satisfaction. Analyze feedback, spot trends, and improve
+                service. Elevate your business with data-driven decision-making
+                and a customer-focused approach.
+              </span>
+              <div class="home-container02">
+                <div class="home-container03">
+                  <div class="primary-pink-button-container">
+                    <button
+                      class="primary-pink-button-button button ButtonSmall"
+                    >
+                      <span>contact us</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="outline-gray-button-container">
+                  <button class="outline-gray-button-button button ButtonSmall">
+                    <span>read more</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <img alt="image" src="static/public/curved6-1500h.jpg" class="home-image" />
+        <section class="home-features">
+          <div class="feature-card-container feature-card-root-class-name">
+            <img
+              alt="image"
+              src="static/public/cube1.svg"
+              class="feature-card-image"
+            />
+            <h5 class="feature-card-text HeadingThree"><span>MODEL</span></h5>
+            <span class="feature-card-text1">
+              <span>tensorflow keras deep learning model</span>
+            </span>
+          </div>
+          <div class="feature-card-container feature-card-root-class-name1">
+            <img
+              alt="image"
+              src="static/public/person1.svg"
+              class="feature-card-image"
+            />
+            <h5 class="feature-card-text HeadingThree"><span>USE</span></h5>
+            <span class="feature-card-text1">
+              <span>identifies emotions through person's voice</span>
+            </span>
+          </div>
+          <div class="feature-card-container">
+            <img
+              alt="image"
+              src="static/public/rocket1.svg"
+              class="feature-card-image"
+            />
+            <h5 class="feature-card-text HeadingThree">
+              <span>UPCOMING FEATURES</span>
+            </h5>
+            <span class="feature-card-text1">
+              <span>multiple audio upload option</span>
+            </span>
+          </div>
+          <div class="feature-card-container">
+            <img
+              alt="image"
+              src="static/public/credit%20card1.svg"
+              class="feature-card-image"
+            />
+            <h5 class="feature-card-text HeadingThree"><span>FREE</span></h5>
+            <span class="feature-card-text1">
+              <span>users can use for free buy logging in as individuals</span>
+            </span>
+          </div>
+        </section>
+        <section id="target2" class="home-container04">
+        <form method="POST", action="/" enctype="multipart/form-data">
+          <div class="home-container05">
+            <h1 class="home-text03">&nbsp; FIND SENTIMENT FROM INPUT</h1>
+            <span class="home-text04">
+              "Pop in your audio, we'll decode the customer vibe!"
+            </span>
+          </div>
+          <div class="home-container06">
+            <input type="file" placeholder="placeholder" class="home input" name="file"/>
+            <input type="submit" value="Submit"/>
+          </div>
         </form>
-    </main>
-
-    <!-- The overlay results section -->
-    <div id="sentiment-overlay">
-        <div id="sentiment-overlay-content"></div>
+        </section>
+        <section id="target1" class="home-testimonials">
+          <div class="home-container07">
+            <div class="home-container08">
+              <div class="home-container09">
+                <div class="home-container10">
+                  <div class="home-container11">
+                    <h2 class="home-text05 HeadingOne">Team Vitality</h2>
+                    <p class="home-text06">Innovate, Collaborate, Elevate.</p>
+                    <p class="home-text07 Lead">
+                      <span>We're a group&nbsp;</span>
+                      <span>
+                        of college sophomores on a mission to put our skills to
+                        good use, making the world a better place while having a
+                        blast. We love tackling new challenges and soaking up
+                        knowledge along the way!
+                      </span>
+                    </p>
+                    <div class="home-container12">
+                      <div class="home-container13">
+                        <div class="home-container14"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="home-container15">
+                  <img
+                    alt="image"
+                    src="static/public/team-4-200h.jpg"
+                    class="home-image01"
+                  />
+                  <img
+                    alt="image"
+                    src="static/public/team-4-200h.jpg"
+                    class="home-image02"
+                  />
+                  <img
+                    alt="image"
+                    src="static/public/team-4-200h.jpg"
+                    class="home-image03"
+                  />
+                  <img
+                    alt="image"
+                    src="static/public/team-4-200h.jpg"
+                    class="home-image04"
+                  />
+                  <img
+                    alt="image"
+                    src="static/public/team-4-200h.jpg"
+                    class="home-image05"
+                  />
+                  <img
+                    alt="image"
+                    src="static/public/team-4-200h.jpg"
+                    class="home-image06"
+                  />
+                  <img
+                    alt="image"
+                    src="static/public/team-4-200h.jpg"
+                    class="home-image07"
+                  />
+                  <img
+                    alt="image"
+                    src="static/public/team-4-200h.jpg"
+                    class="home-image08"
+                  />
+                </div>
+              </div>
+              <div class="home-container16">
+                <label class="home-text10">Name</label>
+                <label class="home-text11">Name</label>
+                <label class="home-text12">Name</label>
+                <label class="home-text13">Name</label>
+                <label class="home-text14">Name</label>
+                <label class="home-text15">Name</label>
+              </div>
+            </div>
+          </div>
+          <img
+            alt="image"
+            src="static/public/bottom.svg"
+            class="home-bottom-wave-image"
+          />
+          <img alt="image" src="static/public/waves-white.svg" class="home-image09" />
+          <img alt="image" src="static/public/top.svg" class="home-top-wave-image" />
+        </section>
+        <section class="home-contaier">
+          <div class="home-divider"></div>
+        </section>
+        <footer class="footer-footer">
+          <div class="footer-container">
+            <div class="footer-container1">
+              <span class="footer-text">SOFT</span>
+              <span>Copyright © 2021 Soft by Creative Tim.</span>
+            </div>
+            <div class="footer-container2">
+              <div class="footer-container3">
+                <span class="footer-text02 Large">Company</span>
+                <span class="footer-text03 Large">About Us</span>
+                <span class="footer-text04 Large">Careers</span>
+                <span class="footer-text05 Large">Press</span>
+              </div>
+              <div class="footer-container4">
+                <span class="footer-text06 Large">Pages</span>
+                <span class="footer-text07 Large">Login</span>
+                <span class="footer-text08 Large">Register</span>
+                <span class="footer-text09 Large">About</span>
+              </div>
+              <div class="footer-container5">
+                <span class="footer-text10 Large">Products</span>
+                <span class="footer-text11 Large">Free</span>
+                <span class="footer-text12 Large">PRO</span>
+                <span class="footer-text13 Large">Latest</span>
+              </div>
+            </div>
+          </div>
+          <img alt="image" src="static/public/waves-white.svg" class="footer-image" />
+        </footer>
+      </div>
     </div>
-
+    <!-- <script src="https://unpkg.com/@teleporthq/teleport-custom-scripts"></script> -->
+    
     <!-- Bootstrap CDN JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="{{url_for('static', filename='scripts/scripts.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-</body>
-
+    </body>
 </html>
