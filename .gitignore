@@ -1,4 +1,6 @@
+/model/emotion.csv
 .env
 __pycache__
-/wav/*
 /archive/*
+/Datasets
+/model/best_model1_weights.h5
