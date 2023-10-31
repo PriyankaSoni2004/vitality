@@ -188,18 +188,25 @@
           </div>
         </section>
         <section id="target2" class="home-container04">
-        <form method="POST", action="/" enctype="multipart/form-data">
-          <div class="home-container05">
-            <h1 class="home-text03">&nbsp; FIND SENTIMENT FROM INPUT</h1>
-            <span class="home-text04">
-              "Pop in your audio, we'll decode the customer vibe!"
-            </span>
+          <form method="POST" action="/">
+              <div class="home-container05">
+                <h1 class="home-text03">&nbsp; FIND SENTIMENT FROM INPUT</h1>
+                <span class="home-text04">
+                  "Pop in your audio, we'll decode the customer vibe!"
+                </span>
+                <div class="home-container06">
+                  <div id="div-media">
+                    <input type="file" id="form-input-media" class="home input" name="audio-file" />
+                  </div>
+                  <div class="submit-button">
+                    <input type="submit" id="btn-find-sentiment" class="btn btn-success" value="Find Sentiment" />
+                  </div>
+                </div>
+          </form>
+          <!-- The overlay results section -->
+          <div id="sentiment-overlay">
+            <div id="sentiment-overlay-content"></div>
           </div>
-          <div class="home-container06">
-            <input type="file" placeholder="placeholder" class="home input" name="file"/>
-            <input type="submit" value="Submit"/>
-          </div>
-        </form>
         </section>
         <section id="target1" class="home-testimonials">
           <div class="home-container07">
@@ -320,6 +327,7 @@
         </footer>
       </div>
     </div>
+
     <script src="https://unpkg.com/@teleporthq/teleport-custom-scripts"></script>
     
     <!-- Bootstrap CDN JS -->

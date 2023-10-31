@@ -24,65 +24,58 @@ $(document).ready(function () {
                 processData: false,
             })
                 .done((response) => {
-                    val_neu = Math.round(parseFloat(response["score_neutral"]) * 10000) / 100
-                    val_cal = Math.round(parseFloat(response["score_calm"]) * 10000) / 100
-                    val_hap = Math.round(parseFloat(response["score_happy"]) * 10000) / 100
-                    val_sad = Math.round(parseFloat(response["score_sad"]) * 10000) / 100
                     val_ang = Math.round(parseFloat(response["score_angry"]) * 10000) / 100
-                    val_fea = Math.round(parseFloat(response["score_fearful"]) * 10000) / 100
                     val_dis = Math.round(parseFloat(response["score_disgust"]) * 10000) / 100
-                    val_sur = Math.round(parseFloat(response["score_surprised"]) * 10000) / 100
-                    
+                    val_fea = Math.round(parseFloat(response["score_fear"]) * 10000) / 100
+                    val_hap = Math.round(parseFloat(response["score_happy"]) * 10000) / 100
+                    val_neu = Math.round(parseFloat(response["score_neutral"]) * 10000) / 100
+                    val_sad = Math.round(parseFloat(response["score_sad"]) * 10000) / 100
+                    val_sur = Math.round(parseFloat(response["score_surprise"]) * 10000) / 100
+
                     $("#sentiment-overlay-content").html(`
-                        <h2>PROMINENT SENTIMENT</h2>
+                        <h2>Sentiment:</h2>
                         <p id="prominent-sentiment">` + response["prominent_sentiment"] + `</p>
                         <div id="sentiment-info">
                             <div id="sentiment-table">
                                 <table class="table">
                                     <thead>
-                                        <th scope="col">&#128566;</th>
                                         <th scope="col">SENTIMENT</th>
                                         <th scope="col">VALUE</th>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td>&#128528;</td>
-                                            <td>neutral</td>
-                                            <td>` + val_neu + `%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>&#128524;</td>
-                                            <td>calm</td>
-                                            <td>` + val_cal + `%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>&#128512;</td>
-                                            <td>happy</td>
-                                            <td>` + val_hap + `%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>&#128532;</td>
-                                            <td>sad</td>
-                                            <td>` + val_sad + `%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>&#128544;</td>
                                             <td>angry</td>
                                             <td>` + val_ang + `%</td>
                                         </tr>
                                         <tr>
-                                            <td>&#128552;</td>
-                                            <td>fearful</td>
-                                            <td>` + val_fea + `%</td>
-                                        </tr>
-                                        <tr>
-                                            <td>&#129314;</td>
+                                            <td>&#128524;</td>
                                             <td>disgust</td>
                                             <td>` + val_dis + `%</td>
                                         </tr>
                                         <tr>
-                                            <td>&#128562;</td>
-                                            <td>surprised</td>
+                                            <td>&#128512;</td>
+                                            <td>fear</td>
+                                            <td>` + val_fea + `%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>&#128532;</td>
+                                            <td>happy</td>
+                                            <td>` + val_hap + `%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>&#128544;</td>
+                                            <td>neutral</td>
+                                            <td>` + val_neu + `%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>&#128552;</td>
+                                            <td>sad</td>
+                                            <td>` + val_sad + `%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>&#129314;</td>
+                                            <td>surprise</td>
                                             <td>` + val_sur + `%</td>
                                         </tr>
                                     </tbody>
@@ -96,18 +89,18 @@ $(document).ready(function () {
                     new Chart(chart, {
                         type: 'radar',
                         data: {
-                            labels: ['neutral', 'calm', 'happy', 'sad', 'angry', 'fearful', 'disgust', 'surprised'],
+                            labels: ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise'],
                             datasets: [{
                                 label: 'Sentiment',
-                                data: [val_neu, val_cal, val_hap, val_sad,val_ang,val_fea,val_dis,val_sur],
+                                data: [val_ang, val_dis, val_fea, val_hap, val_neu, val_sad, val_sur],
                                 fill: true,
-                                color: '#FFFFFF',
+                                color: '#000000',
                                 backgroundColor: 'rgba(255, 99, 132, 0.5)',
                                 borderColor: 'rgb(255, 99, 132)',
-                                pointBackgroundColor: '#FFFFFF',
-                                pointBorderColor: '#FFFFFF',
-                                pointHoverBackgroundColor: '#FFFFFF',
-                                pointHoverBorderColor: '#FFFFFF'
+                                pointBackgroundColor: '#000000',
+                                pointBorderColor: '#000000',
+                                pointHoverBackgroundColor: '#000000',
+                                pointHoverBorderColor: '#000000'
                             }]
                         },
                         options: {
@@ -117,7 +110,7 @@ $(document).ready(function () {
                                 },
                                 legend: {
                                     labels: {
-                                        color: 'rgb(255, 255, 255)',
+                                        color: 'rgb(0, 0, 0)',
                                         fontSize: 18
                                     }
                                 }
@@ -125,13 +118,13 @@ $(document).ready(function () {
                             scales: {
                                 r: {
                                     angleLines: {
-                                        color: 'rgba(255, 255, 255, 0.8)'
+                                        color: 'rgba(0, 0, 0, 0.8)'
                                     },
                                     grid: {
-                                        color: 'rgba(255, 255, 255, 0.8)'
+                                        color: 'rgba(0, 0, 0, 0.8)'
                                     },
                                     pointLabels: {
-                                        color: 'rgb(255, 255, 255)',
+                                        color: 'rgb(0, 0, 0)',
                                         fontSize: 20
                                     },
                                     ticks: {
