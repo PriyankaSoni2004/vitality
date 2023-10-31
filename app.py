@@ -120,7 +120,7 @@ def home():
     if request.method == "GET":
         return render_template("index.html")
     if request.method == "POST":    
-        file = request.files["file"]
+        file = request.files.get("input")
         if file:
             filename = secure_filename(file.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
