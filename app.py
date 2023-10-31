@@ -84,7 +84,7 @@ def get_predict_feat(path):
     final_result=np.expand_dims(i_result, axis=2)
     return final_result
 
-emotions1={1:'Neutral', 2:'Calm', 3:'Happy', 4:'Sad', 5:'Angry', 6:'Fear', 7:'Disgust',8:'Surprise'}
+emotions1={0:'Angry', 1:'Disgust', 2:'Fear', 3:'Happy', 4:'Neutral', 5:'Sad', 6:'Surprise'}
 
 def prediction(path1, model):
     res=get_predict_feat(path1)
@@ -99,13 +99,13 @@ def getJson(sent, predicted_proba):
     print(predicted_proba_list)
     if len(predicted_proba_list) >= 7:
         return {
-            "score_neutral": predicted_proba_list[0],
-            "score_calm": predicted_proba_list[1],
-            "score_happy": predicted_proba_list[2],
-            "score_sad": predicted_proba_list[3],
-            "score_angry": predicted_proba_list[4],
-            "score_fearful": predicted_proba_list[5],
-            "score_disgust": predicted_proba_list[6],
+            "score_angry": predicted_proba_list[0],
+            "score_disgust": predicted_proba_list[1],
+            "score_fear": predicted_proba_list[2],
+            "score_happy": predicted_proba_list[3],
+            "score_neutral": predicted_proba_list[4],
+            "score_sad": predicted_proba_list[5],
+            "score_surprise": predicted_proba_list[6],
             "prominent_sentiment": sent
         }
     else:
@@ -128,8 +128,8 @@ def home():
             audio_sentiment_model = load_audio_sentiment_model()
             try:
                 emotion = prediction(file_path, audio_sentiment_model)
-                #jsonObject = send_to_api(file_path)
-                #print(textwrap.fill(str(jsonObject), 100))
+                # jsonObject = send_to_api(file_path)
+                # print(textwrap.fill(str(jsonObject), 100))
                 return jsonify(emotion)
             except Exception as e:
                 return jsonify({"error": str(e)})
@@ -140,7 +140,7 @@ def home():
 @app.route('/login', methods=["GET"])
 def login():
     if request.method == "GET":
-        return render_template('coming-soon.html')
+        return render_template('login.html')
 
 ################################ Assembly AI API ###########################################
 def send_to_api(file_path):
